@@ -1,0 +1,18 @@
+sudo -i
+
+mv jdk-17 /opt
+vi ~/.bashrc
+{
+  #install JDK
+  export JAVA_HOME=/opt/jkd-17
+  export CLASSPATH=.:${JAVA_HOME}/lib
+  export PATH=${JAVA_HOME}/bin:$PATH
+}
+source ~/.bashrc
+
+update-alternatives --install /usr/bin/java java /opt/jdk-17/bin/java 1
+update-alternatives --install /usr/bin/javac javac /opt/jdk-17/bin/javac 1
+update-alternatives --set java /opt/jdk-17/bin/java 1
+update-alternatives --set javac /opt/jdk-17/bin/javac 1
+
+java

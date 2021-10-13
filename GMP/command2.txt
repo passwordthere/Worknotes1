@@ -1,0 +1,30 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#Additional checks 
+
+▌B
+Serial Number
+Network -> iLO Dedicated Network Port -> General -> FQDN -> submit -> Reset
+Administration -> Access Settings -> Server Name bsa1234 (example) , Server FQDN bsa1234.od.sap.biz (example) 
+Administration -> Management -> SNMP Settings -> Read Community: hppsp. Trap Community:automated
+Virtual Media -> Boot Order -> Boot Mode -> Legacy BIOS 
+
+▌R
+Administration -> User Administration -> Local Users -> If no "support" and "a1sroot" and "GMPmoni" user
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#VIP Movement
+
+df -h|grep vol2
+lsof /sapdb/<SID>/sapdata1
+
+gmp_info
+df -h | egrep vol[1-3]_[A-Z]
+pdnsd-ctl empty-cache
+
+in use
+rename
+move instance: live > system available
+verify vips
+snow
+update gmp: 1 live update 2 resync
+

@@ -1,0 +1,122 @@
+C:\Users\%username%\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets\
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+wget -O /tmp/cabling_checker.sh http://repo:50000/repo/ByD-SAP-Cloud/c5233808_Network_Testing_Scripts/testing/cabling_checker.sh
+chmod +x /tmp/cabling_checker.sh
+/tmp/cabling_checker.sh
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Event Ticketing: HCP_EVENT_TICKETING
+IBP: IBP_INTEGRATED_BUSINESS_PLANNING_NETWEAVER
+ByD/C4C: SAAS_BYD_C4C_CLOUD_OPERATIONS
+DEV/VLAB: SAAS_DEVELOPMENT_AND_VERIFICATION_LANDSCAPE_SYSTEM
+SAP CP: CP_NEO_PLATFORM_SERVER_SUPPORT
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#inspec
+
+cp /etc/fstab /etc/fstab.bak
+sed -i_GMPSM-8238 -e '/nfs/s/,[rw]size=[[:digit:]]\+//g' -e '/nfs/s/,actimeo=[[:digit:]]\+//g' /etc/fstab
+umount -a -t nfs;mount -a
+mount | grep vol[1-3]
+
+chgrp -v sapsys /usr/sap/sapservices && chmod -v 0755 /usr/sap/sapservices
+
+mount -o remount,exec /tmp
+rpm -e MFErt MFEcma ISecTP ISecESPAac ISecESP ISecESPFileAccess McAfeeRt
+rm -rf /opt/McAfee/ /opt/isec/ /var/McAfee /etc/ma.d/ 
+wget -O /tmp/mcafee-install.sh http://repo:50000/repo/tools/McAfee/mcafee-install.sh ; sh /tmp/mcafee-install.sh ; rm /tmp/mcafee-install.sh 
+systemctl enable ma ; /usr/lib/systemd/systemd-sysv-install enable ma
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#/var
+
+df -hP /var && ls -lahS $(find /var/ -xdev -type f -size +10000k)
+
+df -hP /var/log && ls -lahS $(find /var/log -xdev -type f -size +20000k)
+
+rm /var/osquery/osquery.db/*.sst && service osqueryd restart
+
+zypper clean -a 
+
+logrotate -f /etc/logrotate.conf
+logrotate -f /etc/logrotate.d/syslog
+
+service syslog stop
+bzip2 -c /var/log/<filename> &gt; /tmp/<filename>_`date +%Y%m%d`.bz2
+echo -n '' &gt; /var/log/<filename>
+mv /tmp/<filename>_`date +%Y%m%d`.bz2 /var/log/
+service syslog start 
+
+rm /var/log/elasticsearch/gc.log.* 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#heartbeat
+sc stop joschyd
+sc start joschyd
+sc query joschyd
+
+df -h /var;ps aux | grep [j]oschyd;gmp_info
+
+▌11
+service joschyd stop 
+ps aux | grep [j]oschyd
+
+service joschyd start-nodelay 
+service joschyd status
+
+▌12
+systemctl stop joschyd 
+ps aux | grep [j]oschyd
+
+zypper --quiet ref; zypper --quiet up joschyd
+touch /opt/imal/etc/start-nodelay
+systemctl start joschyd
+
+# to verify if service was restarted, wait for about 30 seconds, then
+systemctl status joschyd
+
+▌windows
+$client = new-object System.Net.WebClient
+$client.DownloadFile('http://repo:50000/repo/windows/scripts/update_all_sap_tools.ps1', 'C:\Users\c5327170\Downloads\update_all_sap_tools.ps1')
+.\update_all_sap_tools.ps1
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#ldap
+
+for i in $(dig ldapr-syd2.$(awk '/domain/ {print $2}' /etc/resolv.conf) +short | grep -v ";") ; do echo "=== $(dig +short -x $i | grep -v ";" | egrep -i "ldap...-...") ===" ; nmap -PN -p ldap $i | egrep -i "state|389/tcp" ; echo " " ; done 
+
+for i in $(dig ldap-syd2.$(awk '/domain/ {print $2}' /etc/resolv.conf) +short) ; do echo "=== $(dig +short -x $i | egrep -i "ldap..-...") ===" ; nmap -PN -p ldap $i | egrep -i "state|389/tcp" ; echo " " ; done 
+
+for i in $(dig ldapmaster-syd2.$(awk '/domain/ {print $2}' /etc/resolv.conf) +short) ; do echo "=== $(dig +short -x $i | egrep -i "ldap...-...") ===" ; nmap -PN -p ldap $i | egrep -i "state|389/tcp" ; echo " " ; done 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#/tmp
+
+df -h /tmp
+df -hi /tmp
+
+df -h /tmp && find /tmp/ -xdev -type f -size +20000k -exec ls -lah {} \;
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+gmp_info;uptime;virsh list --all;virtualip list;ps auxww|grep [s]ap;df -h
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+#ldapchk-saas 
+
+/opt/imal/bin/ldapchk.pl -v -syncstate
+
+rcldap start
+
+On SLES12: systemctl restart slapd
+---
+ldapsearch -x -h localhost cn=c5327170
+
+ps -ef | grep slapd
+
+kill -9 `pgrep slapd`;rcldap start;
+
+On SLES12:# kill -9 `pgrep slapd`; systemctl restart slapd

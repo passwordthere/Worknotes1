@@ -1,0 +1,113 @@
+Docker
+核心
+    docker pull registry(docker.io)/repository(library)/image:tag(latest)
+    docker push ilikeating/sexy:tagname
+    docker tag  //rename
+    docker image ls //docker images
+    docker rmi
+    
+    docker build
+    docker commit   //base on running container
+    ------
+    dokcer run                        nginx
+                -d  //background
+                -p 127.0.0.2:8080:80
+                -p 127.0.0.2:8081:443
+                --rm
+                --name
+                -w  //WORKDIR
+                -v "$PWD/html":/usr/share/nginx/html    //--volume
+
+    docker create
+    docker start    
+    docker stop     
+    docker pause    
+    docker rm
+    
+    docker attach
+    docker exec     //会在运行中的容器执行一个新进程
+    docker nsenter
+
+    docker inspect <both>
+    docker history <image>
+
+    docker save     //all read-only layer and their meta data
+    docker import file.tar image:tag    //plus write layer
+    docker export name > file.tar
+
+    docker network ls   //查看网络服务
+    docker network create -d bridge my-bridge   //创建一个自定义网桥
+    docker network connect my-bridge[网桥名称] web[容器名称]    //容器绑定网桥
+    ------
+    FROM
+    RUN
+    ADD
+    COPY
+    USER
+    ENTRYPOINT
+    CMD
+    ENV
+    ARG
+    EXPOSE
+    WORKDIR
+
+    created     //Created
+    running     //Up 2 seconds
+    stopped     //Exited (0) 2 seconds ago
+    opaused     //Up 7 seconds (Paused)
+    deleted
+编排
+集群
+
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+
+    docker login
+image
+    docker image ls
+    docker image rm [name]
+    docker image pull library/hello-world //拉取到本地（默认组library）
+    docker image tag [name] [user]/[repo]:[tag]
+    docker image build -t [user]/[repo]:[tag]
+    docker image push [user]/[repo]:[tag]
+container
+    docker container run hello-world //从img生成、新建实例（会自动pull镜像）
+    docker container start [id]
+    docker container stop [id]
+    dokcer container logs [id] //查看容器里面的shell标准输出（若没有使用-it）
+    docker container inspect [id] //容器信息
+    docker container exec -it [id] /bin/bash //进入容器（若没有使用-it）
+    docker container run -it ubuntu bash
+                         -rm //停止后删除
+                         -d //启动后后台
+                         -p 127.0.0.2:8080:80 //将容器的80映射到127.0.0.2的8080
+                         --name 
+                         --volume "$PWD":/var/www/html
+                         --link //这个：那个
+                         
+    docker container kill [id] //等价于ctrl+d
+    docker container ls //running
+    docker container ls --all //running + stoped
+    docker container rm [id]
+    docker container cp [id]:[/path/to/file] //从容器拷贝到本机
+    >>>
+    $ docker container run -p 8000:3000 -it koa-demo:0.0.1 /bin/bash
+    -p 8000:3000 将容器的3000映射到本机的8000
+    -it 将容器的shell映射到本机的shell
+    /bin/bash 容器启动后运行的第一个命令
+Dockerfile
+    .dockerignore
+    Dockerfile: 
+        FROM node:8.4 //image文件继承官方的node image，冒号后表示标签
+        COPY . /app //将当前目录下所有文件打包
+        WORKDIR /app
+        RUN npm install --registry=https://registry.npm.taobao.org //在工作目录下安装所有依赖并一齐打包
+        EXPOSE 3000
+        CMD node demos/01.js //RUN(N)执行结果亦打包，CMD(1)容器启动后执行
+    docker image build -t <name:tag> .
+
+
+

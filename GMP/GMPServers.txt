@@ -1,0 +1,17 @@
+Backup
+Chef Server
+DNS Host
+DNS Zone
+Load Balancer Virtual Server
+Customer
+Storage
+Security Group
+DNS Alias
+DNS Network
+DNS Nameserver
+Resource Pool
+Hyperviosr
+Volume
+VM Pool
+Virtual Machine
+Blade Server

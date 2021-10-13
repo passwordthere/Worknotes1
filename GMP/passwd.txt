@@ -1,0 +1,5 @@
+windows vm(rdc, oasis)
+administrator GM8tr3MH
+
+(virsh console)
+root eeZ9aegh9ju=Gh0e
