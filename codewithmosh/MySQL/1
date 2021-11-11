@@ -1,0 +1,25 @@
+SELECT DISTINCT 不重复 AS 重命名
+
+WHERE [NOT] birth_date > '1990-01-01' 日期需加上引号 AND优先级大于OR
+WHERE state IN ('VA', 'FL', 'GA') == "WHERE state = 'VA' OR state = 'FL' OR state = 'GA'"
+WHERE points BETWEEN 1000 AND 3000 == "WHERE points >= 1000 AND points <= 3000"
+WHERE last_name LIKE '%b_' %代表任意数目，_代表确切数目
+WHERE last_name REGEXP 'field' == "WHERE last_name LIKE '%field%'" ^$|[] '[gim]e' == 'ge' 'ie' 'me' [a-f]
+WHERE phone IS [NOT] NULL 
+
+ORDER BY first_name DESC 倒序，可同时排序多列
+
+LIMIT 6, 3 从7开始，返回前三条
+
+JOIN customers ON orders.customers_id = customers.customers_id
+
+
+
+
+
+
+SELECT order_date, order_id, first_name, shippername AS shipper, status
+FROM products p
+LEFT JOIN orders o ON p.product_id = o.product_id
+LEFT JOIN shipper sh ON p.shippername = sh.shippername
+ORDER BY order_id

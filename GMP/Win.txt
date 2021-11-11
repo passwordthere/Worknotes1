@@ -1,4 +1,0 @@
-ppt > zip
-regsvr32 /u igfxpph.dll
-win+shift+s
-win+v
